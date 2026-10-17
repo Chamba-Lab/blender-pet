@@ -1,14 +1,44 @@
 # Blender Pet · ChambaLab
 
-Proyecto de modelado y renders del mapache de ChambaLab en Blender.
+**El hogar de los modelos y renders de Blender de ChambaLab.**
 
-- `mapache/mapache.blend`: escena principal editable.
-- `mapache/scripts/`: scripts de construcción, materiales, cámaras y poses para ejecutar dentro de Blender.
-- `mapache/sheet/`: hoja del personaje y vistas renderizadas.
-- `mapache/poses/`: renders y configuración JSON de poses.
+Aquí vivirán las escenas editables, las hojas de personaje y los renders de nuestros personajes: vistas, expresiones y poses listas para usar en la web y en piezas visuales.
 
-Para trabajar con el personaje, abre la escena principal en Blender. Los scripts contienen rutas del entorno original (`C:\APPS\Renders`); ajústalas si clonas el proyecto en otra ubicación.
+![Hoja del mapache de ChambaLab con distintas vistas del personaje](mapache/sheet/mapache-sheet.png)
 
-Las referencias originales no se distribuyen. La reconstrucción de la cara con `build_m2_face.py` requiere la referencia local `mapache/references/highsfield3.png`. El modelo guardado puede abrirse sin reconstruirlo desde los scripts.
+## 🦝 Primer personaje: el mapache
 
-La configuración local, las referencias, los borradores, las capturas intermedias, los experimentos y los backups quedan fuera del repositorio.
+Un mapache de acabado mate, pelo pizarra y detalles crema. La hoja de personaje sirve como referencia visual del modelo desde distintos ángulos.
+
+<p align="center">
+  <img src="mapache/sheet/mapache-front.png" width="30%" alt="Vista frontal del mapache" />
+  <img src="mapache/sheet/mapache-34.png" width="30%" alt="Vista de tres cuartos del mapache" />
+  <img src="mapache/sheet/mapache-back.png" width="30%" alt="Vista posterior del mapache" />
+</p>
+
+## 🎬 Poses y miradas
+
+Exploraciones de reposo, curiosidad, presentación y mirada hacia arriba. Las poses se configuran en JSON y se renderizan con los scripts del proyecto.
+
+![Galería de poses del mapache de ChambaLab](mapache/poses/mapache-poses.png)
+
+## 📦 Qué encontrarás aquí
+
+| Ruta | Contenido |
+| --- | --- |
+| [`mapache/mapache.blend`](mapache/mapache.blend) | Escena principal editable en Blender. |
+| [`mapache/scripts/`](mapache/scripts/) | Construcción del personaje, materiales, luces, cámaras y poses. |
+| [`mapache/sheet/`](mapache/sheet/) | Hoja de personaje y vistas renderizadas. |
+| [`mapache/poses/`](mapache/poses/) | Renders de poses y su configuración JSON. |
+
+## 🛠️ Trabajar con el proyecto
+
+1. Clona este repositorio y abre `mapache/mapache.blend` en Blender.
+2. Para modificar o generar vistas y poses, consulta los scripts de `mapache/scripts/`; se ejecutan dentro de Blender.
+3. Ajusta las rutas de los scripts si trabajas fuera de la ubicación original: `C:\APPS\Renders`.
+
+La reconstrucción de la cara con `build_m2_face.py` requiere la referencia local `mapache/references/highsfield3.png`, que no se distribuye. Puedes abrir el modelo guardado sin reconstruirlo desde los scripts.
+
+## 🔒 Archivos locales
+
+Este repositorio conserva los modelos, los scripts y los renders seleccionados. La configuración local, las referencias originales, los borradores, las capturas intermedias, los experimentos y los backups quedan excluidos mediante `.gitignore`.
