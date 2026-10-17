@@ -1,0 +1,30 @@
+# Local agent configuration and credentials
+.codex/
+.agents/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials*.json
+secrets*.json
+
+# Blender backups and local experiments
+*.blend[0-9]*
+*.blend@
+**/backup/
+**/lab/
+
+# Private source references, work drafts and intermediate captures
+**/references/
+mapache/brief.md
+**/blockout/
+
+# Temporary files
+__pycache__/
+*.py[cod]
+_tmp*
+*.tmp
+*.log
+.DS_Store
+Thumbs.db

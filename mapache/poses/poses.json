@@ -1,0 +1,99 @@
+{
+  "_nota": "Grados. head = [giro Z, inclinación Y, elevación m, cabeceo X opcional (negativo = mirar arriba)] sobre la base del cuello. arm = [lado del personaje, elevación lateral, adelante]. gaze = [u, v] en m (set_gaze). 'left/right' = lado de la pantalla con Cam_Pose (casi frontal, -10°).",
+  "camera": {
+    "yaw": -10.0,
+    "lens": 70.0,
+    "dist": 4.75,
+    "target": [
+      0.0,
+      0.0,
+      0.97
+    ],
+    "lift": 0.2,
+    "res": [
+      1200,
+      1600
+    ]
+  },
+  "poses": {
+    "rest": {},
+    "curious-left": {
+      "head": [
+        -20,
+        -9,
+        0.0
+      ],
+      "gaze": [
+        -0.03,
+        -0.004
+      ]
+    },
+    "curious-right": {
+      "head": [
+        20,
+        9,
+        0.0
+      ],
+      "gaze": [
+        0.03,
+        -0.004
+      ]
+    },
+    "present-left": {
+      "head": [
+        -12,
+        -3,
+        0.0
+      ],
+      "arm": [
+        "R",
+        70,
+        25
+      ],
+      "gaze": [
+        -0.035,
+        -0.006
+      ]
+    },
+    "present-right": {
+      "head": [
+        12,
+        3,
+        0.0
+      ],
+      "arm": [
+        "L",
+        70,
+        25
+      ],
+      "gaze": [
+        0.035,
+        -0.006
+      ]
+    },
+    "look-up-left": {
+      "head": [
+        -15,
+        -4,
+        0.0,
+        -14
+      ],
+      "gaze": [
+        -0.025,
+        0.008
+      ]
+    },
+    "look-up-right": {
+      "head": [
+        15,
+        4,
+        0.0,
+        -14
+      ],
+      "gaze": [
+        0.025,
+        0.008
+      ]
+    }
+  }
+}
