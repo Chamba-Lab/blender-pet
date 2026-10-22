@@ -1,6 +1,6 @@
 # M5 — Cola: bala gruesa con anillos crema en zigzag ondulado (highsfield1) y punta oscura.
 # Objeto Raccoon_Tail (origen en la base, hijo del cuerpo). Las rayas son del material (coordenadas del objeto).
-#   exec(open(r"C:\APPS\Renders\mapache\scripts\build_m5_tail.py", encoding="utf-8").read())
+#   exec(open(bpy.path.abspath("//scripts/build_m5_tail.py"), encoding="utf-8").read())
 import bpy, bmesh, math
 from mathutils import Vector
 

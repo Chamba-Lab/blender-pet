@@ -5,7 +5,7 @@
 # - Cerca del contorno de la cara se levantan más (anillo que da la silueta erizada de frente).
 # - Copete de púas altas arriba, entre las orejas.
 # Ejecutar en Blender después de M1/M2:
-#   exec(open(r"C:\APPS\Renders\mapache\scripts\build_m3_fur.py", encoding="utf-8").read())
+#   exec(open(bpy.path.abspath("//scripts/build_m3_fur.py"), encoding="utf-8").read())
 import bpy, bmesh, math, random
 from mathutils import Vector, Matrix
 

@@ -1,5 +1,5 @@
 # Capturas de blockout: frente, 3/4, perfil y espalda (Workbench, ortográfica) en una sola tira PNG.
-# Uso en Blender: exec(open(r"C:\APPS\Renders\mapache\scripts\preview.py", encoding="utf-8").read()); strip(out_path, center_z, ortho)
+# Uso en Blender: exec(open(bpy.path.abspath("//scripts/preview.py"), encoding="utf-8").read()); strip(out_path, center_z, ortho)
 import bpy, os, math
 import numpy as np
 from mathutils import Vector

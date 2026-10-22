@@ -1,7 +1,7 @@
 # M4 — Cuerpo: torso en forma de pera, piernas, pies con dedos (una sola pieza) y brazos con manos
 # de 3 dedos, fundidos en vivo con el cuerpo (Geometry Nodes + Remesh + Smooth), como el conejo.
 # Además, la "V" crema del pecho. Referencia: highsfield1.
-#   exec(open(r"C:\APPS\Renders\mapache\scripts\build_m4_body.py", encoding="utf-8").read())
+#   exec(open(bpy.path.abspath("//scripts/build_m4_body.py"), encoding="utf-8").read())
 import bpy, bmesh, math
 from mathutils import Vector, Matrix
 

@@ -1,5 +1,5 @@
 # M8 — Pupilas del mapache (antes de las poses). Se ejecuta después de M1–M7.
-# exec(open(r"C:\APPS\Renders\mapache\scripts\build_m8_eyes.py", encoding="utf-8").read()); build_pupils()
+# exec(open(bpy.path.abspath("//scripts/build_m8_eyes.py"), encoding="utf-8").read()); build_pupils()
 # Ojo = elipsoide (eye_r, eye_ry, eye_d) en su marco local: x = lado, y = arriba, z = normal hacia fuera.
 # La pupila es un botón oscuro satinado que se apoya en la superficie del ojo y se mete bajo el párpado
 # (expresión de sueño). La mirada se cambia con set_gaze(u, v) sin tocar el modelo.

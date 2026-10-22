@@ -1,12 +1,12 @@
 # M6 — material de vinilo mate, luz tipo Higgsfield, fondo transparente y suelo que recoge la sombra.
 # Se ejecuta después de M1–M5. Uso en Blender:
-#   exec(open(r"C:\APPS\Renders\mapache\scripts\build_m6_look.py", encoding="utf-8").read()); build_m6()
+#   exec(open(bpy.path.abspath("//scripts/build_m6_look.py"), encoding="utf-8").read()); build_m6()
 #   test_render(r"...\png", yaw=25)   # render de prueba compuesto sobre #6E7F95
 import bpy, math, os
 import numpy as np
 from mathutils import Vector, Matrix
 
-SCRIPTS = r"C:\APPS\Renders\mapache\scripts"
+SCRIPTS = bpy.path.abspath("//scripts")
 
 LOOK = dict(
     # vinilo mate: rugosidad, brillo especular bajo y subsurface leve

@@ -1,13 +1,13 @@
 # M2 — Cejas en "M" y barba (sin boca), como relieves crema sobre la cabeza.
 # Las siluetas salen de references/highsfield3.png (vista frontal), simetrizadas, y se proyectan desde
 # delante sobre Raccoon_Head. Ejecutar dentro de Blender, después de build_m1_head.py:
-#   exec(open(r"C:\APPS\Renders\mapache\scripts\build_m2_face.py", encoding="utf-8").read())
+#   exec(open(bpy.path.abspath("//scripts/build_m2_face.py"), encoding="utf-8").read())
 import bpy, bmesh, math
 import numpy as np
 from collections import deque
 from mathutils import Vector
 
-REF = r"C:\APPS\Renders\mapache\references\highsfield3.png"
+REF = bpy.path.abspath("//references/highsfield3.png")
 CROP = (120, 280, 740, 900)            # x0, y0, x1, y1 (px, origen arriba-izquierda)
 # Anclaje: centros de los ojos en el recorte (204,345)/(410,347) <-> x ±0,205, z 1,345 en el modelo
 S = 0.41 / 206.0

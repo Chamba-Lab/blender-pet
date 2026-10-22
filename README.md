@@ -35,15 +35,15 @@ Exploraciones de reposo, curiosidad, presentación y mirada hacia arriba. Las po
 
 1. Clona este repositorio y abre `mapache/mapache.blend` en Blender.
 2. Para modificar o generar vistas y poses, consulta los scripts de `mapache/scripts/`; se ejecutan dentro de Blender.
-3. Ajusta las rutas de los scripts si trabajas fuera de la ubicación original: `C:\APPS\Renders`.
+3. Los scripts resuelven sus rutas desde el archivo `.blend`: guarda y abre `mapache/mapache.blend` antes de ejecutarlos.
 
 La reconstrucción de la cara con `build_m2_face.py` requiere la referencia local `mapache/references/highsfield3.png`, que no se distribuye. Puedes abrir el modelo guardado sin reconstruirlo desde los scripts.
 
 ## Skill de referencia
 
-La carpeta [`skills/personaje-vinilo-blender/`](skills/personaje-vinilo-blender/) conserva una copia de la skill compartida para crear personajes de vinilo en Blender, con sus scripts, plantillas y referencias. Consulta su [LEEME](skills/personaje-vinilo-blender/LEEME.md) y su [SKILL.md](skills/personaje-vinilo-blender/SKILL.md).
+La carpeta [`skills/personaje-vinilo-blender/`](skills/personaje-vinilo-blender/) conserva una copia de la skill compartida para crear personajes de vinilo en Blender, con sus scripts, plantillas y referencias. Consulta su [README](skills/personaje-vinilo-blender/README.md) y su [SKILL.md](skills/personaje-vinilo-blender/SKILL.md).
 
-Fuente de esta copia: `C:\APPS\skills-compartidas\personaje-vinilo-blender`. Se incluye como referencia del proceso; los cambios en la carpeta compartida no se sincronizan automáticamente.
+Se incluye como referencia del proceso; los cambios en la carpeta compartida no se sincronizan automáticamente.
 
 ## 🔒 Archivos locales
 

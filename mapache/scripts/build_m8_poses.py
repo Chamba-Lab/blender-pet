@@ -1,6 +1,6 @@
 # M8 — Poses estáticas del mapache, definidas en poses/poses.json. Se ejecuta después de M1–M8 (pupilas).
 # No toca el modelo: apply() posa y reset() vuelve al reposo. Uso en Blender:
-#   exec(open(r"C:\APPS\Renders\mapache\scripts\build_m8_poses.py", encoding="utf-8").read())
+#   exec(open(bpy.path.abspath("//scripts/build_m8_poses.py"), encoding="utf-8").read())
 #   write_json(); check_all(); render_all(); compose_strip()
 # Convenciones (como el conejo de Bunny Records):
 #   head = [giro Z, inclinación Y, elevación m, cabeceo X (negativo = mirar arriba)], en grados, sobre el
@@ -13,7 +13,7 @@ import numpy as np
 from mathutils import Vector, Matrix
 from mathutils.bvhtree import BVHTree
 
-ROOT = r"C:\APPS\Renders\mapache"
+ROOT = bpy.path.abspath("//")
 exec(open(os.path.join(ROOT, "scripts", "build_m7_sheet.py"), encoding="utf-8").read())
 exec(open(os.path.join(ROOT, "scripts", "build_m8_eyes.py"), encoding="utf-8").read())
 

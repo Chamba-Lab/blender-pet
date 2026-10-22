@@ -103,7 +103,7 @@ shadow_floor(); studio_lights(accent_hex="#329DA8"); camera("Cam_Main", lens=85,
 Copiar `templates/rig.json` (nombres de objetos, pivote de la cabeza, pares de choque) y `templates/poses.json` a la carpeta del personaje.
 
 ```python
-exec(open(r"<skill>/scripts/layers_lib.py", encoding="utf-8").read()); init(r"C:\ruta\mi-personaje")
+exec(open(r"<skill>/scripts/layers_lib.py", encoding="utf-8").read()); init(r"<carpeta-personaje>")
 apply(POSES["curious-left"]); clashes()       # 0 = sin choques
 min_clear("curious-left", ("head", 2), 0.0, 0.06, 0.005)   # elevación mínima sin choques
 reset()
@@ -123,7 +123,7 @@ render_shadow(); render_pose("rest"); render_pose("curious-left")        # tanda
 for t in STEPS: render_tween("curious-left", t)                             # reposo → pose
 for t in STEPS: render_tween("look-up-left", t, to="curious-left")          # transición directa
 verify_pose("curious-left")      # {"ok": True} con media < 0,3/255 y p99,9 ≤ 5 (a resolución real)
-export_web(r"C:\ruta\mi-personaje\web")     # WebP recortados + layers.web.js
+export_web(r"<carpeta-personaje>/web")     # WebP recortados + layers.web.js
 ```
 
 Después copiar `templates/player.html` a `web/index.html` y probarlo en el navegador.

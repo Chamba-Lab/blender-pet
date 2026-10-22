@@ -1,7 +1,7 @@
 # M3 — Collar de pelo bajo la cabeza (cachitos que apuntan hacia fuera y hacia abajo).
 # Se diseña a un costado de la cabeza (C["offset"]) y, una vez aprobado, se une con attach_collar().
 # Medidas tomadas de la cabeza: ancho 0,86 m -> collar de ~0,70 m de ancho exterior.
-#   exec(open(r"C:\APPS\Renders\mapache\scripts\build_m3_collar.py", encoding="utf-8").read())
+#   exec(open(bpy.path.abspath("//scripts/build_m3_collar.py"), encoding="utf-8").read())
 import bpy, bmesh, math, random
 from mathutils import Vector, Matrix
 

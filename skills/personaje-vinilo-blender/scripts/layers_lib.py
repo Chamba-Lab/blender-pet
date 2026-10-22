@@ -4,12 +4,12 @@
 #
 # Uso dentro de Blender (MCP execute_blender_code), con el .blend del personaje abierto:
 #   exec(open(r"<skill>/scripts/layers_lib.py", encoding="utf-8").read())
-#   init(r"C:\ruta\mi-personaje")
+#   init(r"<carpeta-personaje>")
 #   render_shadow(); render_pose("rest"); render_pose("curious-left")
 #   render_tween("curious-left", 0.5)                       # reposo -> pose, t = 0,5
 #   render_tween("look-up-left", 0.5, to="curious-left")    # transición directa entre poses
 #   verify_pose("rest")                                      # capas montadas == render completo
-#   export_web(r"C:\ruta\mi-personaje\web")                 # WebP recortados + layers.web.js
+#   export_web(r"<carpeta-personaje>/web")                 # WebP recortados + layers.web.js
 # Renderizar en tandas de 6-9 imágenes por llamada (el MCP pasa a segundo plano a los 120 s).
 import bpy, math, json, os
 import numpy as np

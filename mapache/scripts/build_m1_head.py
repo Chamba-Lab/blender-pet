@@ -1,5 +1,5 @@
 # M1 — Cabeza base del mapache (bola + hocico, ojos sin pupila, párpados, nariz, orejas).
-# Ejecutar dentro de Blender: exec(open(r"C:\APPS\Renders\mapache\scripts\build_m1_head.py", encoding="utf-8").read())
+# Ejecutar dentro de Blender: exec(open(bpy.path.abspath("//scripts/build_m1_head.py"), encoding="utf-8").read())
 # Unidades: altura total 2,0 m. Frente del personaje = -Y. "_L" = lado izquierdo del personaje (+X).
 import bpy, bmesh, math
 from mathutils import Vector, Matrix

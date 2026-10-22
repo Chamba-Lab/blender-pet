@@ -1,12 +1,12 @@
 # M7 — hoja de personaje: frente, 3/4, perfil, 3/4 trasera y espalda (ortográfica) + primer plano de la cara (85 mm).
 # Se ejecuta después de M6 (usa su luz, materiales y render). No toca el modelo. Uso en Blender:
-#   exec(open(r"C:\APPS\Renders\mapache\scripts\build_m7_sheet.py", encoding="utf-8").read())
+#   exec(open(bpy.path.abspath("//scripts/build_m7_sheet.py"), encoding="utf-8").read())
 #   render_views(); render_face(); compose_sheet()
 import bpy, math, os
 import numpy as np
 from mathutils import Vector, Matrix
 
-SHEET_DIR = r"C:\APPS\Renders\mapache\sheet"
+SHEET_DIR = bpy.path.abspath("//sheet")
 
 SHEET = dict(
     # plató giratorio: (nombre, giro de cámara y luces alrededor de Z en grados)
