@@ -48,3 +48,7 @@ Se incluye como referencia del proceso; los cambios en la carpeta compartida no 
 ## 🔒 Archivos locales
 
 Este repositorio conserva los modelos, los scripts y los renders seleccionados. La configuración local, las referencias originales, los borradores, las capturas intermedias, los experimentos y los backups quedan excluidos mediante `.gitignore`.
+
+## Licencias
+
+El modelo y los renders se publican bajo [CC BY 4.0](LICENSE-CC-BY-4.0). Los scripts, la configuración de poses, la skill y la documentación se publican bajo [MIT](LICENSE-MIT). Consulta el [alcance y ejemplo de atribución](LICENSE.md).

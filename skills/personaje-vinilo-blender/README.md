@@ -19,3 +19,7 @@ C0 requisitos → C1 brief → C2 blockout → C3 material y luz → C4 hoja de 
 La lección del enfoque 3: verificar a la **resolución final**, porque en una previsualización pequeña los bordes pesan más y pueden hacer fallar el percentil. Este umbral comprueba la fidelidad de las capas; no mide el parecido del personaje con una referencia de diseño. Mantén coherentes los límites documentados en `SKILL.md`, `references/capas-y-web.md` y el docstring de `verify_pose()` si los cambias.
 
 Esta es una copia de referencia de la skill compartida; no se sincroniza automáticamente.
+
+## Licencia
+
+Toda esta carpeta, incluidos la skill, las referencias, los scripts y las plantillas, se publica bajo [MIT](LICENSE). Conserva ese archivo al instalar o redistribuir la skill.
