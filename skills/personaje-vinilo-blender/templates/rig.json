@@ -1,0 +1,112 @@
+{
+  "_nota": "Copiar a <carpeta del personaje>/rig.json y cambiar los nombres por los objetos reales del .blend. Todo en metros y en coordenadas del mundo. 'ears' va en orden de PANTALLA: primero la que sale a la izquierda (la oreja derecha del personaje). arms: L/R = lado del PERSONAJE (L en +X).",
+  "prefix": "char",
+  "head": "Char_Head",
+  "head_parts": [
+    "Char_Head",
+    "Char_Nose"
+  ],
+  "head_pivot": [
+    0,
+    0,
+    1.0
+  ],
+  "body": [
+    "Char_Body",
+    "Char_Tail"
+  ],
+  "ears": [
+    "Char_Ear_R",
+    "Char_Ear_L"
+  ],
+  "eyes": [
+    "Char_Eye_L",
+    "Char_Eye_R"
+  ],
+  "blink": [
+    "Char_Blink_L",
+    "Char_Blink_R"
+  ],
+  "arms": {
+    "L": "Char_Arm_L",
+    "R": "Char_Arm_R"
+  },
+  "arms_fused": true,
+  "arm_rest_up": 14,
+  "floor": "Floor",
+  "clash_pairs": [
+    [
+      "Char_Head",
+      "Char_Body"
+    ],
+    [
+      "Char_Arm_L",
+      "Char_Head"
+    ],
+    [
+      "Char_Arm_R",
+      "Char_Head"
+    ],
+    [
+      "Char_Arm_L",
+      "Char_Ear_L"
+    ],
+    [
+      "Char_Arm_R",
+      "Char_Ear_R"
+    ]
+  ],
+  "clash_clip_z": {
+    "Char_Body": 0.86
+  },
+  "pivots_world": {
+    "head": [
+      0,
+      0,
+      1.0
+    ],
+    "ear_left": [
+      -0.3,
+      0,
+      1.95
+    ],
+    "ear_right": [
+      0.3,
+      0,
+      1.95
+    ],
+    "feet": [
+      0,
+      0,
+      0
+    ]
+  },
+  "halo_half_width_px": null,
+  "accent": "#329DA8",
+  "transitions": [
+    [
+      "look-up-left",
+      "curious-left"
+    ],
+    [
+      "look-up-right",
+      "curious-right"
+    ],
+    [
+      "curious-left",
+      "present-left"
+    ],
+    [
+      "curious-right",
+      "present-right"
+    ],
+    [
+      "look-up-left",
+      "present-left"
+    ],
+    [
+      "look-up-right",
+      "present-right"
+    ]
+  ]
+}

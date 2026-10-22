@@ -39,6 +39,12 @@ Exploraciones de reposo, curiosidad, presentación y mirada hacia arriba. Las po
 
 La reconstrucción de la cara con `build_m2_face.py` requiere la referencia local `mapache/references/highsfield3.png`, que no se distribuye. Puedes abrir el modelo guardado sin reconstruirlo desde los scripts.
 
+## Skill de referencia
+
+La carpeta [`skills/personaje-vinilo-blender/`](skills/personaje-vinilo-blender/) conserva una copia de la skill compartida para crear personajes de vinilo en Blender, con sus scripts, plantillas y referencias. Consulta su [LEEME](skills/personaje-vinilo-blender/LEEME.md) y su [SKILL.md](skills/personaje-vinilo-blender/SKILL.md).
+
+Fuente de esta copia: `C:\APPS\skills-compartidas\personaje-vinilo-blender`. Se incluye como referencia del proceso; los cambios en la carpeta compartida no se sincronizan automáticamente.
+
 ## 🔒 Archivos locales
 
 Este repositorio conserva los modelos, los scripts y los renders seleccionados. La configuración local, las referencias originales, los borradores, las capturas intermedias, los experimentos y los backups quedan excluidos mediante `.gitignore`.

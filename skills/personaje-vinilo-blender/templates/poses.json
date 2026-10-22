@@ -1,0 +1,76 @@
+{
+  "_nota": "Grados y metros. head = [giro Z, inclinación Y, elevación m, cabeceo X opcional (negativo = mirar arriba)] sobre rig.json → head_pivot. ears / ears_x = giro extra en Y / X por objeto (sirve para orejas, antenas, cola...). arm = [lado del personaje L|R, elevación, adelante]; arms = varios brazos a la vez. 'left/right' en el nombre = lado de la PANTALLA con la cámara de la web.",
+  "poses": {
+    "rest": {},
+    "curious-left": {
+      "head": [
+        -22,
+        -10,
+        0.03
+      ],
+      "ears": {
+        "Char_Ear_R": -8,
+        "Char_Ear_L": -4
+      }
+    },
+    "curious-right": {
+      "head": [
+        22,
+        10,
+        0.03
+      ],
+      "ears": {
+        "Char_Ear_L": 8,
+        "Char_Ear_R": 4
+      }
+    },
+    "present-left": {
+      "head": [
+        -12,
+        -3,
+        0.01
+      ],
+      "arm": [
+        "R",
+        80,
+        15
+      ]
+    },
+    "present-right": {
+      "head": [
+        12,
+        3,
+        0.01
+      ],
+      "arm": [
+        "L",
+        80,
+        15
+      ]
+    },
+    "look-up-left": {
+      "head": [
+        -18,
+        -5,
+        0.03,
+        -18
+      ],
+      "ears_x": {
+        "Char_Ear_L": -6,
+        "Char_Ear_R": -6
+      }
+    },
+    "look-up-right": {
+      "head": [
+        18,
+        5,
+        0.03,
+        -18
+      ],
+      "ears_x": {
+        "Char_Ear_L": -6,
+        "Char_Ear_R": -6
+      }
+    }
+  }
+}

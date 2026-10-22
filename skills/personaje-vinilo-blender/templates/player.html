@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prueba de animación del personaje</title>
+<!-- Copiar junto a layers.web.js y assets/ (salida de export_web). Funciona con doble clic;
+     si el navegador bloquea file://, servir la carpeta: py -m http.server 8765 --bind 127.0.0.1 -->
+<style>
+  :root { --bg: #0C111C; --accent: #329DA8; --text: #F4F4F2; --muted: #8A93A3; --card: #141B29; --line: #222C3D; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
+    font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  body { overflow: hidden; }
+  .scene { position: relative; height: 100vh; display: grid; grid-template-columns: 1fr minmax(260px, 48vh) 1fr;
+    grid-template-rows: auto 1fr auto; gap: 16px; padding: 16px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; display: grid; place-items: center;
+    color: var(--muted); cursor: pointer; transition: border-color .2s, transform .2s; min-height: 120px; user-select: none; }
+  .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .card.up-left { grid-column: 1; grid-row: 1; height: 22vh; }
+  .card.up-right { grid-column: 3; grid-row: 1; height: 22vh; }
+  .card.left { grid-column: 1; grid-row: 2; align-self: center; height: 26vh; }
+  .card.right { grid-column: 3; grid-row: 2; align-self: center; height: 26vh; }
+  .stage { grid-column: 2; grid-row: 2 / 4; align-self: end; position: relative; width: 100%; cursor: pointer; }
+  .canvas { position: absolute; left: 0; top: 0; transform-origin: 0 0; transform: scale(var(--s, .3)); }
+  .group { position: absolute; inset: 0; }
+  /* corte limpio, nunca fundido cruzado: dos capas al 50 % dejan ver el fondo */
+  .layer { position: absolute; opacity: 0; pointer-events: none; user-select: none; }
+  .layer.on { opacity: 1; }
+  .halo { position: absolute; border-radius: 50%; }
+  .breathing .g-body { animation: breathe-body 3.6s ease-in-out infinite; }
+  .breathing .g-upper { animation: breathe-upper 3.6s ease-in-out infinite; }
+  @keyframes breathe-body { 50% { transform: scaleY(1.012); } }
+  @keyframes breathe-upper { 50% { transform: translateY(-6px); } }
+  .g-head, .g-ears { transition: transform 260ms cubic-bezier(.3,.7,.4,1); }
+  .ear { position: absolute; inset: 0; transition: transform 420ms cubic-bezier(.34,1.7,.5,1) 60ms; }
+  .pop .g-rig { animation: pop 320ms cubic-bezier(.34,1.56,.64,1); }
+  @keyframes pop { 40% { transform: scale(1.025); } }
+  .dancing .g-rig { animation: sway 800ms ease-in-out 2; }
+  .dancing .ear-left { animation: earL 400ms ease-in-out 4; }
+  .dancing .ear-right { animation: earR 400ms ease-in-out 4; }
+  @keyframes sway { 25% { transform: rotate(-5deg) translateY(-10px); } 50% { transform: none; } 75% { transform: rotate(5deg) translateY(-10px); } }
+  @keyframes earL { 50% { transform: rotate(-14deg); } }
+  @keyframes earR { 50% { transform: rotate(14deg); } }
+  .static .g-rig, .static .g-body, .static .g-upper { animation: none !important; }
+  .panel { position: fixed; left: 16px; bottom: 16px; width: 300px; background: rgba(20,27,41,.92);
+    border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; font-size: 12.5px; z-index: 5; }
+  .panel .row { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+  .panel button { background: #1D2738; color: var(--text); border: 1px solid #2B374C; border-radius: 8px; padding: 4px 8px; font: inherit; cursor: pointer; }
+  .panel button:hover { border-color: var(--accent); }
+  .panel label { display: flex; gap: 6px; align-items: center; color: var(--muted); }
+  .panel .stat { color: var(--muted); }
+  @media (max-width: 700px) {
+    .scene { grid-template-columns: 1fr 1fr; grid-template-rows: auto auto 1fr; }
+    .card.left, .card.right { grid-row: 2; height: 14vh; }
+    .card.right, .card.up-right { grid-column: 2; }
+    .stage { grid-column: 1 / 3; grid-row: 3; width: min(70vw, 42vh); justify-self: center; }
+    .panel { width: auto; right: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="scene">
+  <div class="card up-left" data-side="up-left">arriba · izquierda</div>
+  <div class="card up-right" data-side="up-right">arriba · derecha</div>
+  <div class="card left" data-side="left">izquierda</div>
+  <div class="card right" data-side="right">derecha</div>
+  <div class="stage" id="stage" title="Clic: bailar"><div class="canvas" id="canvas"></div></div>
+</div>
+<div class="panel">
+  <div>Pose: <b id="poseName">rest</b></div>
+  <div class="row" id="poseButtons"></div>
+  <div class="row"><button id="dance">Bailar</button><button id="blinkNow">Parpadear</button></div>
+  <label><input type="checkbox" id="follow" checked> Mirar al puntero</label>
+  <label><input type="checkbox" id="reduce"> Simular «movimiento reducido»</label>
+  <div class="stat" id="weight"></div>
+</div>
+
+<script src="layers.web.js"></script>
+<script>
+(() => {
+  const B = window.CHARACTER, P = B.pivots, [CW, CH] = B.canvas;
+  const K = (...p) => [B.prefix, ...p].join('-');
+  const has = k => !!B.layers[k];
+  const canvas = document.getElementById('canvas'), stage = document.getElementById('stage');
+  const reduceMQ = window.matchMedia('(prefers-reduced-motion: reduce)');
+  stage.style.aspectRatio = `${CW} / ${CH}`;
+  Object.assign(canvas.style, { width: CW + 'px', height: CH + 'px' });
+  document.documentElement.style.setProperty('--accent', B.halo_css.color);
+
+  // ---------- montaje ----------
+  const el = (tag, cls, parent) => { const e = document.createElement(tag); if (cls) e.className = cls; parent && parent.appendChild(e); return e; };
+  const img = (key, parent) => {
+    const L = B.layers[key], i = el('img', 'layer', parent);
+    i.src = L.file; i.alt = ''; i.dataset.key = key;
+    Object.assign(i.style, { left: L.x + 'px', top: L.y + 'px', width: L.w + 'px', height: L.h + 'px' });
+    return i;
+  };
+  const feet = B.halo_css.center, hw = B.halo_css.half_width;
+  const halo = el('div', 'halo', canvas);   // sombra de color: sobre fondo casi negro la sombra real no se ve
+  Object.assign(halo.style, { left: (feet[0] - hw * 1.15) + 'px', top: (feet[1] - hw * .28) + 'px', width: hw * 2.3 + 'px',
+    height: hw * .56 + 'px', background: `radial-gradient(closest-side, ${B.halo_css.color}61, ${B.halo_css.color}1f 60%, transparent)` });
+  const full = has(K('full', 'rest')) ? img(K('full', 'rest'), canvas) : null;   // movimiento reducido
+  const rig = el('div', 'group g-rig', canvas); rig.style.transformOrigin = `${feet[0]}px ${feet[1]}px`;
+  img(K('shadow'), rig).classList.add('on');
+  const gBody = el('div', 'group g-body', rig); gBody.style.transformOrigin = `${feet[0]}px ${feet[1]}px`;
+  const gUpper = el('div', 'group g-upper', rig);
+  const gEars = el('div', 'group g-ears', gUpper), gHead = el('div', 'group g-head', gUpper);
+  const head = P.head || [CW / 2, CH / 2];
+  gHead.style.transformOrigin = gEars.style.transformOrigin = `${head[0]}px ${head[1]}px`;
+  const earL = el('div', 'ear ear-left', gEars), earR = el('div', 'ear ear-right', gEars);
+  if (P.ear_left) earL.style.transformOrigin = `${P.ear_left[0]}px ${P.ear_left[1]}px`;
+  if (P.ear_right) earR.style.transformOrigin = `${P.ear_right[0]}px ${P.ear_right[1]}px`;
+  const earImgs = [[K('ear', 'left'), earL], [K('ear', 'right'), earR]].filter(([k]) => has(k)).map(([k, g]) => img(k, g));
+
+  // ---------- grafo de poses: nodos = poses, aristas = fotogramas intermedios ----------
+  const STEPS = ['t25', 't50', 't75'], FRAME_MS = 22;
+  const imgs = {}, getImg = (key, parent) => imgs[key] || (imgs[key] = img(key, parent));
+  const NODE = {};
+  for (const p of Object.keys(B.poses)) {
+    const h = K('head', p, 'open'), bl = K('head', p, 'blink');
+    NODE[p] = { body: K('body', p), head: h, blink: has(bl) ? bl : null };
+  }
+  const EDGE = {};
+  function addEdge(a, b, mid) {
+    const f = STEPS.map(s => ({ body: K('body', `${mid}-${s}`), head: K('head', `${mid}-${s}`, 'open') }));
+    if (!f.every(x => has(x.body) && has(x.head))) return;
+    EDGE[a + '|' + b] = f; EDGE[b + '|' + a] = [...f].reverse();
+  }
+  for (const p of Object.keys(NODE)) if (p !== 'rest') addEdge('rest', p, p);
+  for (const [a, b] of B.transitions || []) if (NODE[a] && NODE[b]) addEdge(a, b, `${a}--${b}`);
+  for (const f of [...Object.values(NODE), ...Object.values(EDGE).flat()]) {
+    getImg(f.body, gBody); getImg(f.head, gHead); if (f.blink) getImg(f.blink, gHead);
+  }
+  const neighbours = n => Object.keys(EDGE).filter(k => k.startsWith(n + '|')).map(k => k.split('|')[1]);
+  function distFrom(src) {   // Dijkstra en número de fotogramas
+    const d = { [src]: 0 }, todo = new Set(Object.keys(NODE));
+    while (todo.size) {
+      let u = null; for (const n of todo) if (d[n] !== undefined && (u === null || d[n] < d[u])) u = n;
+      if (u === null) break; todo.delete(u);
+      for (const v of neighbours(u)) { const w = d[u] + EDGE[u + '|' + v].length + 1; if (d[v] === undefined || w < d[v]) d[v] = w; }
+    }
+    return d;
+  }
+  const DIST = {}; for (const n of Object.keys(NODE)) DIST[n] = distFrom(n);
+  const far = (a, b) => DIST[a][b] ?? 1e9;
+  const nextHop = (u, t) => {
+    let best = null;
+    for (const v of neighbours(u)) { const c = EDGE[u + '|' + v].length + 1 + far(v, t); if (!best || c < best.c) best = { v, c }; }
+    return best && best.v;
+  };
+
+  // ---------- estado: en un nodo (v = null) o en la arista u→v, fotograma i ----------
+  let cur = { u: 'rest', v: null, i: 0 }, target = 'rest', timer = null;
+  let blinking = false, busyUntil = 0, shown = [], allReady = false;
+  const atNode = () => cur.v === null;
+  const frameOf = () => atNode() ? NODE[cur.u] : EDGE[cur.u + '|' + cur.v][cur.i - 1];
+  function render() {
+    const f = frameOf(), want = [f.body, blinking && f.blink ? f.blink : f.head];
+    for (const k of want) imgs[k].classList.add('on');            // primero lo nuevo, después se quita lo viejo
+    for (const k of shown) if (!want.includes(k)) imgs[k].classList.remove('on');
+    shown = want;
+    earImgs.forEach(e => e.classList.toggle('on', atNode() && cur.u === 'rest'));
+  }
+  function tick() {   // un fotograma por paso por el camino más corto; da la vuelta si el objetivo cambia
+    if (atNode() && cur.u === target) { timer = null; if (target.startsWith('present')) popNow(); return; }
+    if (atNode()) {
+      const v = nextHop(cur.u, target);
+      if (!v) { cur = { u: target, v: null, i: 0 }; render(); timer = null; return; }   // sin intermedios: corte directo
+      cur = { u: cur.u, v, i: 1 };
+    } else {
+      const n = EDGE[cur.u + '|' + cur.v].length;
+      const fwd = (n + 1 - cur.i) + far(cur.v, target), back = cur.i + far(cur.u, target);
+      if (back < fwd) cur = { u: cur.v, v: cur.u, i: n + 1 - cur.i };
+      cur.i++;
+      if (cur.i > n) cur = { u: cur.v, v: null, i: 0 };
+    }
+    render();
+    timer = setTimeout(tick, FRAME_MS);
+  }
+  function popNow() { if (isStatic()) return; document.body.classList.remove('pop'); void document.body.offsetWidth; document.body.classList.add('pop'); }
+  function setPose(p) {
+    if (p === target || !NODE[p] || (!allReady && p !== 'rest')) return;
+    target = p; document.getElementById('poseName').textContent = p;
+    if (p !== 'rest') clearTilt();
+    if (isStatic()) { cur = { u: p, v: null, i: 0 }; render(); return; }
+    if (!timer) tick();
+  }
+
+  // ---------- una sola decisión de mirada, con histéresis y confirmación ----------
+  const toCurious = { 'left': 'curious-left', 'right': 'curious-right', 'up-left': 'look-up-left', 'up-right': 'look-up-right' };
+  const toPresent = { 'left': 'present-left', 'right': 'present-right', 'up-left': 'present-left', 'up-right': 'present-right' };
+  const follow = document.getElementById('follow');
+  let ptr = null, hoverSide = null, pending = null, pendTimer = null;
+  function headScreenPoint() { const r = canvas.getBoundingClientRect(), s = r.width / CW; return [r.left + head[0] * s, r.top + head[1] * s, s]; }
+  const ok = p => NODE[p] ? p : 'rest';
+  function desired() {
+    if (hoverSide) return ok(toCurious[hoverSide]);
+    if (!follow.checked || !ptr) return 'rest';
+    const [hx, hy, s] = headScreenPoint(), dx = (ptr[0] - hx) / s, dy = (ptr[1] - hy) / s;
+    const keep = p => target === p ? 90 : 0, left = dx < 0;
+    const up = left ? 'look-up-left' : 'look-up-right', side = left ? 'curious-left' : 'curious-right';
+    if (dy < -(CH * .26 - keep(up)) && Math.abs(dx) > CW * .125 - keep(up)) return ok(up);
+    if (Math.abs(dx) > CW * .43 - keep(side)) return ok(side);
+    return 'rest';
+  }
+  function evaluate() {
+    if (isStatic() || performance.now() < busyUntil) return;
+    const d = desired();
+    if (d === target) { clearTimeout(pendTimer); pending = null; return; }
+    if (d === pending) return;
+    pending = d; clearTimeout(pendTimer);
+    pendTimer = setTimeout(() => { pending = null; setPose(d); }, hoverSide ? 60 : 140);
+  }
+  function clearTilt() { gHead.style.transform = gEars.style.transform = earL.style.transform = earR.style.transform = ''; }
+  function applyTilt() {   // micro-giro con orejas de muelle, solo quieto en reposo
+    if (!(atNode() && cur.u === 'rest' && target === 'rest') || !ptr || !follow.checked || isStatic()) return;
+    const [hx, , s] = headScreenPoint(), tilt = Math.max(-4, Math.min(4, (ptr[0] - hx) / s / 120));
+    gHead.style.transform = gEars.style.transform = `rotate(${tilt}deg)`;
+    earL.style.transform = earR.style.transform = `rotate(${-tilt * 1.6}deg)`;
+  }
+  window.addEventListener('pointermove', e => { ptr = [e.clientX, e.clientY]; evaluate(); applyTilt(); });
+  document.documentElement.addEventListener('pointerleave', () => { ptr = null; hoverSide = null; evaluate(); });
+  follow.addEventListener('change', evaluate);
+  function gesture(p, ms) {
+    clearTimeout(pendTimer); pending = null;
+    setPose(ok(p)); busyUntil = performance.now() + ms;
+    clearTimeout(gesture.t); gesture.t = setTimeout(() => { busyUntil = 0; setPose(desired()); }, ms);
+  }
+
+  // ---------- parpadeo, tarjetas, baile ----------
+  function blink() {
+    if (isStatic() || timer) return;
+    blinking = true; render(); setTimeout(() => { blinking = false; render(); }, 120);
+  }
+  (function loop() { setTimeout(() => { blink(); loop(); }, 4000 + Math.random() * 3000); })();
+  document.querySelectorAll('.card').forEach(c => {
+    c.addEventListener('pointerenter', () => { hoverSide = c.dataset.side; evaluate(); });
+    c.addEventListener('pointerleave', () => { hoverSide = null; evaluate(); });
+    c.addEventListener('click', () => gesture(toPresent[c.dataset.side], 2200));
+  });
+  const buttons = document.getElementById('poseButtons');
+  for (const p of Object.keys(NODE)) if (p !== 'rest') {
+    const b = el('button', '', buttons); b.textContent = p; b.addEventListener('click', () => gesture(p, 2200));
+  }
+  document.getElementById('blinkNow').addEventListener('click', blink);
+  function dance() {
+    if (isStatic()) return;
+    gesture('rest', 1700);
+    document.body.classList.remove('dancing'); void document.body.offsetWidth; document.body.classList.add('dancing');
+    setTimeout(() => document.body.classList.remove('dancing'), 1700);
+  }
+  stage.addEventListener('click', dance);
+  document.getElementById('dance').addEventListener('click', dance);
+
+  // ---------- movimiento reducido: imagen fija ----------
+  const reduce = document.getElementById('reduce');
+  function isStatic() { return reduce.checked || reduceMQ.matches; }
+  function applyMotionMode() {
+    const st = isStatic();
+    document.body.classList.toggle('static', st); document.body.classList.toggle('breathing', !st);
+    if (full) { rig.style.display = st ? 'none' : ''; full.classList.toggle('on', st); }
+    if (st) { clearTimeout(timer); timer = null; target = 'rest'; cur = { u: 'rest', v: null, i: 0 }; clearTilt(); render();
+              document.getElementById('poseName').textContent = 'rest'; }
+  }
+  reduce.addEventListener('change', applyMotionMode);
+  reduceMQ.addEventListener?.('change', applyMotionMode);
+
+  const fit = () => canvas.style.setProperty('--s', stage.clientWidth / CW);
+  new ResizeObserver(fit).observe(stage); fit();
+  const kb = n => Math.round(n / 1024), sum = ks => ks.reduce((a, k) => a + (B.layers[k]?.bytes || 0), 0);
+  document.getElementById('weight').textContent =
+    `Peso: reposo ${kb(sum(B.poses.rest))} KB · todo ${kb(sum(Object.keys(B.layers)))} KB`;
+
+  // primero se muestra el reposo descodificado; el resto se descodifica después (img.decode)
+  const first = new Set([...B.poses.rest, K('head', 'rest', 'blink'), K('full', 'rest')]);
+  canvas.style.visibility = 'hidden';
+  Promise.all([...canvas.querySelectorAll('img')].filter(i => first.has(i.dataset.key)).map(i => i.decode().catch(() => {})))
+    .then(() => { canvas.style.visibility = ''; })
+    .then(() => Promise.all(Object.values(imgs).map(i => i.decode().catch(() => {}))))
+    .then(() => { allReady = true; evaluate(); });
+  applyMotionMode(); render();
+})();
+</script>
+</body>
+</html>

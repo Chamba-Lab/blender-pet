@@ -17,6 +17,8 @@ secrets*.json
 
 # Private source references, work drafts and intermediate captures
 **/references/
+!skills/personaje-vinilo-blender/references/
+!skills/personaje-vinilo-blender/references/**
 mapache/brief.md
 **/blockout/
 
