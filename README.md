@@ -51,4 +51,4 @@ Este repositorio conserva los modelos, los scripts y los renders seleccionados. 
 
 ## Licencias
 
-El modelo y los renders se publican bajo [CC BY 4.0](LICENSE-CC-BY-4.0). Los scripts, la configuración de poses, la skill y la documentación se publican bajo [MIT](LICENSE-MIT). Consulta el [alcance y ejemplo de atribución](LICENSE.md).
+El modelo y los renders son de Chamba Lab, con todos los derechos reservados: para usarlos fuera de la comunidad hace falta permiso ([LICENSE-ASSETS.md](LICENSE-ASSETS.md)). Los scripts, la configuración de poses, la skill y la documentación se publican bajo [MIT](LICENSE). Consulta el [alcance de cada licencia](LICENSE.md).
